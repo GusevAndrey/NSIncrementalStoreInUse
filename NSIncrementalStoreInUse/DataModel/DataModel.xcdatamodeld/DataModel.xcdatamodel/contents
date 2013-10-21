@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3396" systemVersion="12F45" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="BaseDataEntity" representedClassName="BaseDataEntity" isAbstract="YES" syncable="YES">
+        <attribute name="creationDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <userInfo>
+            <entry key="entityTable" value="SQLiteDataEntity"/>
+            <entry key="rowIdField" value="id"/>
+            <entry key="SQLSubentityName" value="SQLiteDataEntity"/>
+        </userInfo>
+    </entity>
+    <entity name="CoreDataEntity" representedClassName="CoreDataEntity" parentEntity="BaseDataEntity" syncable="YES">
+        <attribute name="relatedSQLEntityID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <relationship name="relatedEntities" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="CoreDataRelatedEntity" inverseName="relatedEntitie" inverseEntity="CoreDataRelatedEntity" syncable="YES"/>
+        <fetchedProperty name="sqliteRelatedEntities" optional="YES" syncable="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="SQLiteRelatedEntity" predicateString="entityId == $FETCH_SOURCE.relatedSQLEntityID"/>
+        </fetchedProperty>
+    </entity>
+    <entity name="CoreDataRelatedEntity" representedClassName="CoreDataRelatedEntity" syncable="YES">
+        <attribute name="entityId" optional="YES" attributeType="Integer 64" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <relationship name="relatedEntitie" optional="YES" maxCount="1" deletionRule="Nullify" ordered="YES" destinationEntity="CoreDataEntity" inverseName="relatedEntities" inverseEntity="CoreDataEntity" syncable="YES"/>
+    </entity>
+    <entity name="SQLiteDataEntity" representedClassName="SQLiteDataEntity" parentEntity="BaseDataEntity" syncable="YES">
+        <attribute name="coreDataRelatedEntityID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <relationship name="relatedEntities" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="SQLiteRelatedEntity" inverseName="relatedEntitie" inverseEntity="SQLiteRelatedEntity" syncable="YES"/>
+        <fetchedProperty name="coreDataRelatedEntities" optional="YES" transient="YES" syncable="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="CoreDataRelatedEntity" predicateString="entityId == $FETCH_SOURCE.coreDataRelatedEntityID"/>
+        </fetchedProperty>
+        <userInfo>
+            <entry key="rowIdField" value="id"/>
+        </userInfo>
+    </entity>
+    <entity name="SQLiteRelatedEntity" representedClassName="SQLiteRelatedEntity" syncable="YES">
+        <attribute name="entityId" optional="YES" attributeType="Integer 64" defaultValueString="0" indexed="YES" syncable="YES">
+            <userInfo>
+                <entry key="attributeName" value="id"/>
+            </userInfo>
+        </attribute>
+        <relationship name="relatedEntitie" optional="YES" maxCount="1" deletionRule="Nullify" ordered="YES" destinationEntity="SQLiteDataEntity" inverseName="relatedEntities" inverseEntity="SQLiteDataEntity" syncable="YES"/>
+        <userInfo>
+            <entry key="rowIdField" value="id"/>
+        </userInfo>
+    </entity>
+    <configuration name="CoreDataStore">
+        <memberEntity name="CoreDataEntity"/>
+        <memberEntity name="BaseDataEntity"/>
+        <memberEntity name="CoreDataRelatedEntity"/>
+    </configuration>
+    <configuration name="IncrementalStore">
+        <memberEntity name="SQLiteDataEntity"/>
+        <memberEntity name="SQLiteRelatedEntity"/>
+        <memberEntity name="BaseDataEntity"/>
+    </configuration>
+    <elements>
+        <element name="BaseDataEntity" positionX="0" positionY="-108" width="128" height="58"/>
+        <element name="CoreDataEntity" positionX="-119" positionY="-18" width="128" height="104"/>
+        <element name="CoreDataRelatedEntity" positionX="-333" positionY="135" width="128" height="75"/>
+        <element name="SQLiteDataEntity" positionX="124" positionY="-14" width="128" height="104"/>
+        <element name="SQLiteRelatedEntity" positionX="333" positionY="135" width="128" height="75"/>
+    </elements>
+</model>
