@@ -177,12 +177,15 @@
             NSEntityDescription *relatedEntity = [NSEntityDescription entityForName:@"CoreDataRelatedEntity"
                                                              inManagedObjectContext:[wSelf managedObjectContext]];
             
+            NSArray *timeIntervals = @[@(587558058),@(602937258),@(611058858),@(1381617258),@(1382740458)];
             for (int i = 0; i < 5; i++) {
                 
                 //Создаём одну основную CoreData сущность
                 CoreDataEntity *coreDataObject = [[CoreDataEntity alloc] initWithEntity:mainEntity
                                                          insertIntoManagedObjectContext:[wSelf managedObjectContext]];
-                coreDataObject.creationDate = [NSDate date];
+                
+                
+                coreDataObject.creationDate = [NSDate dateWithTimeIntervalSince1970:[timeIntervals[i] doubleValue]];
                 coreDataObject.relatedSQLEntityID = @(i);
                 
                 //И одну привязанную к ней

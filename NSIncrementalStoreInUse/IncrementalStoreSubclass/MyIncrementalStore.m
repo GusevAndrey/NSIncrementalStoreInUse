@@ -284,6 +284,12 @@
                 }
             }];
             
+            //Сброс кеша
+            if (success) {
+                for (NSManagedObject *nextObject in deletedObjects) {
+                    [_rowCache removeObjectForKey:nextObject.objectID];
+                }
+            }
         }
 
 //TODO:
@@ -294,8 +300,13 @@
 //        // Objects that were flagged for optimistic locking on the calling context via detectConflictsForObject:.
 //        - (NSSet *)lockedObjects;
         
-        //По данному типу запроса метод должен вовзращать пустой массив, согласно документации.
-        result = @[];
+        if (success) {
+            //По данному типу запроса метод должен вовзращать пустой массив, согласно документации.
+            result = @[];
+        }
+        else {
+            result = nil;
+        }
     }
     
     //Неизвестный тип запроса

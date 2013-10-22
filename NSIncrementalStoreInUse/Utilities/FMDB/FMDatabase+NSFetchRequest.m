@@ -19,13 +19,44 @@
 //Производит подсчёт объектов, удовлетворяющих переданному fetchRequest-у
 - (NSNumber *) countObjectsWithFetchRequest:(NSFetchRequest *)fRequest error:(NSError **)error {
     
+    //Аргументы запроса
+    NSArray *queryArguments = nil;
+    
+    //Where-клауза
+    BOOL shouldBreakRequest = NO;
+    NSString *whereString = [self fmdbQueryFromPredicate:fRequest.predicate
+                                                  entity:fRequest.entity
+                                                  values:&queryArguments
+                                             shouldBreak:&shouldBreakRequest];
+    
+    //Если запрос необходимо прервать - завершаем выполенение, возвращая результат, будто ничего не нашли без ошибок.
+    if (shouldBreakRequest) {
+        return [NSNumber numberWithInt:0];
+    }
+
     //Название таблицы сущности
     NSString *entityTable = [fRequest.entity.userInfo objectForKey:kMIStoreEntityTable] ?: [fRequest.entityName lowercaseString];
-    //Название поля, представляющего rowId
-    NSString *rowIdField = [fRequest.entity.userInfo objectForKey:kMIStoreRowIdField] ?: @"rowId";
     
     //Результирующая строка SQL-запроса
-    NSString *queryFormatStr = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@ WHERE %@ == %%@",entityTable,rowIdField];
+    NSMutableString *queryFormatStr = [NSMutableString stringWithFormat:@"SELECT COUNT(*) FROM %@",entityTable];
+    
+    if (whereString) {
+        [queryFormatStr appendFormat:@" WHERE %@",whereString];
+    }
+    
+    //Сортировка
+    NSString *orderByString = [self orderQueryFromRequest:fRequest];
+    if (orderByString) {
+        [queryFormatStr appendFormat:@" ORDER BY %@",orderByString];
+    }
+    
+    //Лимит
+    if ([fRequest fetchLimit])
+        [queryFormatStr appendFormat:@" LIMIT %i",[fRequest fetchLimit]];
+    
+    //Отступ
+    if ([fRequest fetchOffset])
+        [queryFormatStr appendFormat:@" OFFSET %i",[fRequest fetchOffset]];
     
     //Результирующее количество записей
     NSNumber *resultsCount = nil;
@@ -42,7 +73,6 @@
         resultsCount = [NSNumber numberWithInt:0];
         
     }
-
     
     //Если ответа не было - ошибка
     if (!requestResult) {

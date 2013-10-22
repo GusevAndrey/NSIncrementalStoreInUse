@@ -70,7 +70,7 @@
     
     //Размер одной выборки
     [fetchRequest setFetchBatchSize:20];
-
+    
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                         managedObjectContext:appDelegate.managedObjectContext
