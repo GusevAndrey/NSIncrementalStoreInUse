@@ -161,14 +161,14 @@
             //Если последний row и нет relatedEntities, то это - fetchedEntities
             else {
                 relatedEntityController.relatedEntities = [self.entity getFetchedEntities];
-                relatedEntityController.title = @"Fethed Property Entities";
+                relatedEntityController.title = @"Fetched Property Entities";
             }
             
             break;
             
         case 2:
             relatedEntityController.relatedEntities = [self.entity getFetchedEntities];
-            relatedEntityController.title = @"Fethed Property Entities";
+            relatedEntityController.title = @"Fetched Property Entities";
             break;
             
         default:

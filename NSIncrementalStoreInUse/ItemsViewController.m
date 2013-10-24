@@ -65,17 +65,20 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:entityName];
     
     //Сортируем объекты по дате создания (самый поздний сверху)
-    NSSortDescriptor *sortByCreationDate = [NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO];
+    NSSortDescriptor *sortByCreationDate = [NSSortDescriptor
+                                            sortDescriptorWithKey:@"creationDate"
+                                            ascending:NO];
     [fetchRequest setSortDescriptors:@[sortByCreationDate]];
     
     //Размер одной выборки
     [fetchRequest setFetchBatchSize:20];
     
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                        managedObjectContext:appDelegate.managedObjectContext
-                                                                          sectionNameKeyPath:nil
-                                                                                   cacheName:nil];
+    self.fetchedResultsController = [[NSFetchedResultsController alloc]
+                                     initWithFetchRequest:fetchRequest
+                                     managedObjectContext:appDelegate.managedObjectContext
+                                     sectionNameKeyPath:nil
+                                     cacheName:nil];
     
 }
 
